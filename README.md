@@ -30,11 +30,11 @@
 
 ```
 SELECT
-  *
-  , (price * all_time_quantity_sold) total_revenue -- find total revenue of each product
-  , DATE_SUB(CURRENT_DATE(), INTERVAL day_ago_created DAY) created_date -- create the created_date column
+	*
+	, (price * all_time_quantity_sold) total_revenue -- find total revenue of each product
+  	, DATE_SUB(CURRENT_DATE(), INTERVAL day_ago_created DAY) created_date -- create the created_date column
 FROM `project_id.staging_warehouse.tiki_data`
-WHERE stock_item.qty is not null -- get only products still in stock
+WHERE stock_item.qty is not null; -- get only products still in stock
 ```
 - Load data from the `data staging area` to a database in `BigQuery`
 
@@ -45,32 +45,33 @@ WHERE stock_item.qty is not null -- get only products still in stock
   ```
   WITH product_origin AS
   (
-			h.id
-			, h.categories.name category
-			, a.value origin
-		FROM `project_id.scraped_data.tiki_data` h
-		, UNNEST(specifications) s
-		, UNNEST(s.attributes) a
-		WHERE a.name = 'Xuất xứ'
+  SELECT
+  	h.id
+  	, h.categories.name category
+  	, a.value origin
+  FROM `project_id.scraped_data.tiki_data` h
+  , UNNEST(specifications) s
+  , UNNEST(s.attributes) a
+  WHERE a.name = 'Xuất xứ'
   )
   SELECT
-			t.id
-			, t.categories.name category
-			, t.current_seller.name seller_name
-			, t.all_time_quantity_sold
-			, t.price
-			, t.rating_average
-			, p.origin
-		FROM `project_id.scraped_data.tiki_data` t
-		LEFT JOIN product_origin p ON t.id = p.id;
+	t.id
+	, t.categories.name category
+	, t.current_seller.name seller_name
+	, t.all_time_quantity_sold
+	, t.price
+	, t.rating_average
+	, p.origin
+  FROM `project_id.scraped_data.tiki_data` t
+  LEFT JOIN product_origin p ON t.id = p.id;
   ```
 
   - Newegg-data:
   ```
   SELECT
-			itemID
-			, brand
-			, total_price
-			, rating
-		FROM `project_id.scraped_data.newegg_data`;
+  	itemID
+	, brand
+	, total_price
+	, rating
+  FROM `project_id.scraped_data.newegg_data`;
   ```
