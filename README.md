@@ -29,6 +29,11 @@
 - Transform tiki-data
 
 ```
-
+SELECT
+  *
+  , (price * all_time_quantity_sold) total_revenue -- find total revenue of each product
+  , DATE_SUB(CURRENT_DATE(), INTERVAL day_ago_created DAY) created_date -- create the created_date column
+FROM `project_id.staging_warehouse.tiki_data`
+WHERE stock_item.qty is not null
 ```
-
+- Load data from the `data staging area` to a database in `BigQuery`
