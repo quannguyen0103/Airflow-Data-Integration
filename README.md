@@ -15,6 +15,20 @@
   - Send an alert email when a task failed
 
 ### 1. Extract data
-- Extract `newegg-data` table from `scraped_data` database in `MySQL` to a `CSV` file: [extract-newegg-data](src/data_processing/extract_newegg_data.py)
-- Extract `tiki-data` collection from `scraped_data` database in `MongoDB` to a `JSON` file: [extract-tiki-data](src/data_processing/extract_tiki_data.py)
+- Extract `newegg-data` table from `scraped_data` database in `MySQL` to `newegg_data.csv` file: [extract-newegg-data](src/data_processing/extract_newegg_data.py)
+- Extract `tiki-data` collection from `scraped_data` database in `MongoDB` to a `tiki_data.json` file: [extract-tiki-data](src/data_processing/extract_tiki_data.py)
   - Use `sed` command to remove `HTML` tags in the `JSON` file: `sed -E 's/<[^>]*>//g'`
+ 
+### 2. Migrate data
+- Migrate `newegg_data.csv` and `tiki_data.json` file to a `GCS bucket`: [migreate-data](src/data_processing)
+
+### 3. Load data to the data staging area
+- Load `newegg_data.csv` and `tiki_data.json` file from the `GCS bucket` to the `data staging area` in `BigQuery`
+
+### 4. Transform and load data
+- Transform tiki-data
+
+```
+
+```
+
