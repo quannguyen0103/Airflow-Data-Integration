@@ -15,5 +15,6 @@
   - Send an alert email when a task failed
 
 ### 1. Extract data
-Script: [extract-tiki-data](src/data-processing/
-- Extract data from 
+- Extract `newegg-data` table from `scraped_data` database in `MySQL` to a `CSV` file: [extract-newegg-data](src/data_processing/extract_newegg_data.py)
+- Extract `tiki-data` collection from `scraped_data` database in `MongoDB` to a `JSON` file: [extract-tiki-data](src/data_processing/extract_tiki_data.py)
+ - Use `sed` command to remove `HTML` tags in the `JSON` file: `sed -E 's/<[^>]*>//g'`
