@@ -47,7 +47,7 @@ dashboard_query = """WITH product_origin AS
 			LEFT JOIN product_origin p ON t.id = p.id;"""
 
 with models.DAG("process_Tiki_data"
-	, schedule_interval = datetime.timedelta(days = 1)
+	, schedule_interval = "0 7 * * *"
 	, default_args = default_dag_args) as dag:
 
 	extract_data_from_mongodb = bash_operator.BashOperator(
@@ -92,7 +92,7 @@ with models.DAG("process_Tiki_data"
 		,
 )
 
-	create_table_for_dashboard = BigQueryExecuteQueryOperator(
+	create_data_mart = BigQueryExecuteQueryOperator(
 		task_id = "create_table_for_dashboard"
 		, destination_dataset_table = "project_id.dashboard.tiki_data"
 		, gcp_conn_id = "gcp_connection"
@@ -104,4 +104,4 @@ with models.DAG("process_Tiki_data"
 		,
 )
 
-extract_data_from_mongodb >> upload_tiki_data_to_gcs >> load_tiki_data_to_staging_warehouse >> transform_and_load_tiki_data >> create_table_for_dashboard
+extract_data_from_mongodb >> upload_tiki_data_to_gcs >> load_tiki_data_to_staging_warehouse >> transform_and_load_tiki_data >> create_data_mart
