@@ -8,7 +8,7 @@
 - Configure `Airflow SMTP` to send alert emails when a task failed
 
 ## ETL Flow
-- ETL Flow: Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
+- Flow: Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
 - DAG: [process-data](src/dag)
   - Run at 7 AM every day
   - Retry 3 times, each time 5 minutes apart
