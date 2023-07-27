@@ -35,21 +35,21 @@ with models.DAG("process_Newegg_data"
 	, schedule_interval = "0 7 * * *"
 	, default_args = default_dag_args) as dag:
 
-	extract_data_from_mysql = bash_operator.BashOperator(
+	extract_data = bash_operator.BashOperator(
 		task_id = "extract_data"
 		, bash_command = "python3 /home/user/pipeline_script/extract_newegg_data.py"
 		, dag=dag
 		,
 )
 
-	load_newegg_data_to_gcs = bash_operator.BashOperator(
+	load_data_to_gcs = bash_operator.BashOperator(
 		task_id = "load_data_to_gcs"
 		, bash_command = "/home/user/pipeline_script/load_newegg_data.sh "
 		, dag=dag
 		,
 )
 
-	load_newegg_data_to_staging_warehouse = GCSToBigQueryOperator(
+	load_data_to_staging_warehouse = GCSToBigQueryOperator(
 		task_id = "load_data_to_staging_warehouse"
 		, bucket = "scraped_data_201"
 		, source_objects =["newegg_data.csv"]
@@ -65,7 +65,7 @@ with models.DAG("process_Newegg_data"
 		,
 )
 
-	transform_and_load_newegg_data = BigQueryExecuteQueryOperator(
+	transform_and_load_data = BigQueryExecuteQueryOperator(
                 task_id = "transform_and_load_data"
                 , destination_dataset_table = "project.scraped_data.newegg_data"
                 , gcp_conn_id = "gcp_connection"
@@ -77,7 +77,7 @@ with models.DAG("process_Newegg_data"
 		,
 )
 
-	create_table_for_dashboard = BigQueryExecuteQueryOperator(
+	create_data_mart = BigQueryExecuteQueryOperator(
 		task_id = "create_table_for_dashboard"
 		, destination_dataset_table = "project_id.dashboard.newegg_data"
 		, gcp_conn_id = "gcp_connection"
@@ -89,4 +89,4 @@ with models.DAG("process_Newegg_data"
 		,
 )
 
-extract_data_from_mysql >> load_newegg_data_to_gcs >> load_newegg_data_to_staging_warehouse >> transform_and_load_newegg_data >> create_table_for_dashboard
+extract_data >> load_data_to_gcs >> load_data_to_staging_warehouse >> transform_and_load_data >> create_data_mart
