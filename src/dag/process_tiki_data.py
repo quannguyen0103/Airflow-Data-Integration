@@ -24,25 +24,27 @@ tiki_sql_query = """SELECT
 		FROM `project_id.staging_warehouse.tiki_data`
 		WHERE stock_item.qty is not null;"""
 
-dashboard_orgin_query = """SELECT
-			h.id
-			, h.categories.name category
-			, a.value origin
-		FROm `project_id.scraped_data.tiki_data` h
-		, UNNEST(specifications) s
-		, UNNEST(s.attributes) a
-		WHERE a.name = 'Xuất xứ';"""
-
-dashboard_query = """SELECT
-			t.id
-			, t.categories.name category
-			, t.current_seller.name seller_name
-			, t.all_time_quantity_sold
-			, t.price
-			, t.rating_average
-			, o.origin
-		FROM `project_id.scraped_data.tiki_data` t
-		LEFT JOIN `project_id.dashboard.tiki_origin_data` o ON t.id = o.id;"""
+dashboard_query = """WITH product_origin AS
+			(
+			SELECT
+				h.id
+				, h.categories.name category
+				, a.value origin
+			FROM `project_id.scraped_data.tiki_data` h
+			, UNNEST(specifications) s
+			, UNNEST(s.attributes) a
+			WHERE a.name = 'Xuất xứ'
+  			)
+			SELECT
+				t.id
+				, t.categories.name category
+				, t.current_seller.name seller_name
+				, t.all_time_quantity_sold
+				, t.price
+				, t.rating_average
+				, P.origin
+			FROM `project_id.scraped_data.tiki_data` t
+			LEFT JOIN product_origin p ON t.id = p.id;"""
 
 with models.DAG("process_Tiki_data"
 	, schedule_interval = datetime.timedelta(days = 1)
@@ -90,19 +92,7 @@ with models.DAG("process_Tiki_data"
 		,
 )
 
-	create_origin_table_for_dashboard = BigQueryExecuteQueryOperator(
-		task_id = "create_origin_table_for_dashboard"
-		, destination_dataset_table = "project_id.dashboard.tiki_origin_data"
-		, gcp_conn_id = "gcp_connection"
-		, create_disposition = "CREATE_IF_NEEDED"
-		, sql = dashboard_orgin_query
-		, use_legacy_sql = False
-		, write_disposition = "WRITE_TRUNCATE"
-		, dag=dag
-		,
-)
-
-	create_final_table_for_dashboard = BigQueryExecuteQueryOperator(
+	create_table_for_dashboard = BigQueryExecuteQueryOperator(
 		task_id = "create_table_for_dashboard"
 		, destination_dataset_table = "project_id.dashboard.tiki_data"
 		, gcp_conn_id = "gcp_connection"
@@ -114,4 +104,4 @@ with models.DAG("process_Tiki_data"
 		,
 )
 
-extract_data_from_mongodb >> upload_tiki_data_to_gcs >> load_tiki_data_to_staging_warehouse >> transform_and_load_tiki_data >> create_origin_table_for_dashboard >> create_final_table_for_dashboard
+extract_data_from_mongodb >> upload_tiki_data_to_gcs >> load_tiki_data_to_staging_warehouse >> transform_and_load_tiki_data >> create_table_for_dashboard
