@@ -70,7 +70,7 @@ WHERE stock_item.qty is not null; -- get only products still in stock
   ```
   SELECT
 	itemID
-  	, brand
+	, brand
 	, total_price
 	, rating
   FROM `project_id.scraped_data.newegg_data`;
