@@ -50,21 +50,21 @@ with models.DAG("process_Tiki_data"
 	, schedule_interval = "0 7 * * *"
 	, default_args = default_dag_args) as dag:
 
-	extract_data_from_mongodb = bash_operator.BashOperator(
+	extract_data = bash_operator.BashOperator(
                 task_id = "extract_data"
                 , bash_command = "/home/user/pipeline_script/extract_tiki_data.sh "
 		, dag=dag
 		,
 )
 
-	upload_tiki_data_to_gcs = bash_operator.BashOperator(
-		task_id = "upload_data_to_gcs"
+	load_data_to_gcs = bash_operator.BashOperator(
+		task_id = "load_data_to_gcs"
 		, bash_command = "/home/user/pipeline_script/load_tiki_data.sh "
 		, dag=dag
 		,
 )
 
-	load_tiki_data_to_staging_warehouse = GCSToBigQueryOperator(
+	load_data_to_staging_warehouse = GCSToBigQueryOperator(
                 task_id = "load_data_to_staging_warehouse"
                 , bucket = "scraped_data_201"
                 , source_objects =["tiki_data.json"]
@@ -80,7 +80,7 @@ with models.DAG("process_Tiki_data"
 		,
 )
 
-	transform_and_load_tiki_data = BigQueryExecuteQueryOperator(
+	transform_and_load_data = BigQueryExecuteQueryOperator(
 		task_id = "transform_and_load_data"
 		, destination_dataset_table = "project_id.scraped_data.tiki_data"
 		, gcp_conn_id = "gcp_connection"
@@ -104,4 +104,4 @@ with models.DAG("process_Tiki_data"
 		,
 )
 
-extract_data_from_mongodb >> upload_tiki_data_to_gcs >> load_tiki_data_to_staging_warehouse >> transform_and_load_tiki_data >> create_data_mart
+extract_data >> load_data_to_gcs >> load_data_to_staging_warehouse >> transform_and_load_data >> create_data_mart
