@@ -55,13 +55,13 @@ WHERE stock_item.qty is not null; -- get only products still in stock
   WHERE a.name = 'Xuất xứ'
   )
   SELECT
-	t.id
-	, t.categories.name category
-	, t.current_seller.name seller_name
-	, t.all_time_quantity_sold
-	, t.price
-	, t.rating_average
-	, p.origin
+  	t.id
+  	, t.categories.name category
+  	, t.current_seller.name seller_name
+  	, t.all_time_quantity_sold
+  	, t.price
+  	, t.rating_average
+  	, p.origin
   FROM `project_id.scraped_data.tiki_data` t
   LEFT JOIN product_origin p ON t.id = p.id;
   ```
