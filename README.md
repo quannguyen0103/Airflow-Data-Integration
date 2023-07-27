@@ -4,7 +4,7 @@
 - Install `Airflow` on the same environment as MySQL and MongoDB
 - Create a `GCS bucket`
 - Create two BigQuery datasets: a `staging area` for data preparation and processing, and a `final dataset` ready for analysis or deployment
-- Set up a `Google Cloud connection` for `Airflow`
+- Set up a [Google Cloud connection](src/connection_configurating/cloud_connection.py) for `Airflow`
 - Configure `Airflow SMTP` to send alert emails when a task failed
 
 ## ETL Flow
@@ -15,4 +15,5 @@
   - Send an alert email when a task failed
 
 ### 1. Extract data
+Script: [extract-tiki-data](src/data-processing/
 - Extract data from 
