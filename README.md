@@ -5,7 +5,7 @@
 - Create a `MySQL` database and a table within the database to store Newegg data: [setup_table](src/data_processing/Newegg/setup_database.py)
 - Create a `MongoDB` database and a collection within the database to store Tiki data
 - Create a `GCS bucket`
-- Create two BigQuery datasets: a `staging area` for data preparation and processing, and a `final dataset` ready for analysis or deployment
+- Create two BigQuery datasets: a `staging dataset` for data preparation and processing, and a `final dataset` ready for analysis or deployment
 - Set up a [Google Cloud connection](src/connection_configurating/cloud_connection.py) for `Airflow`
 - Configure `Airflow SMTP` to send alert emails when a task failed
 
