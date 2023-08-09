@@ -1,31 +1,37 @@
 # Source
 
 ## Setup
-- Install `Airflow` on the same environment as MySQL and MongoDB
+- Install `Airflow`, `MySQL`, and `MongoDB`
+- Set up a table in MySQL to store Newegg data: [setup_table](src/data_processing/Newegg/setup_database.py)
+- Set up a collection in MongoDB to store Tiki data
 - Create a `GCS bucket`
 - Create two BigQuery datasets: a `staging area` for data preparation and processing, and a `final dataset` ready for analysis or deployment
 - Set up a [Google Cloud connection](src/connection_configurating/cloud_connection.py) for `Airflow`
 - Configure `Airflow SMTP` to send alert emails when a task failed
 
-## ETL Flow
-- Flow: Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
+## Airflow
+- Flow: Load data => Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
 - DAG: [process-data](src/dag)
   - Run at 7 AM every day
   - Retry 3 times, each time 5 minutes apart
   - Send an alert email when a task failed
-
-### 1. Extract data
-- Extract `newegg-data` table from `scraped_data` database in `MySQL` to `newegg_data.csv` file: [extract-newegg-data](src/data_processing/extract_newegg_data.py)
-- Extract `tiki-data` collection from `scraped_data` database in `MongoDB` to a `tiki_data.json` file: [extract-tiki-data](src/data_processing/extract_tiki_data.py)
+  
+### 1. Load data
+- Scrape product data from the Tiki website and load it into the `tiki-data` collection in MongoDB: [load-Tiki-data](src/data_processing/Tiki/load_data.py)
+- Scrape product data from the Newegg website and load it into the `newegg-data` table in MySQL: [load-Newegg-data](src/data_processing/Newegg/load_data.py)
+  
+### 2. Extract data
+- Extract `newegg-data` table from `scraped_data` database in `MySQL` to `newegg_data.csv` file: [extract-newegg-data](src/data_processing/Newegg/extract_data.py)
+- Extract `tiki-data` collection from `scraped_data` database in `MongoDB` to a `tiki_data.json` file: [extract-tiki-data](src/data_processing/Tiki/extract_data.py)
   - Use `sed` command to remove `HTML` tags in the `JSON` file: `sed -E 's/<[^>]*>//g'`
  
-### 2. Migrate data
-- Migrate `newegg_data.csv` and `tiki_data.json` file to a `GCS bucket`: [migrate-data](src/data_processing)
+### 3. Migrate data
+- Migrate `newegg_data.csv` ([migrate-Newegg-data](src/data_processing/Newegg/migrate_data.sh)) and `tiki_data.json` ([migrate-Tiki-data](src/data_processing/Tiki/migrate_data.sh)) file to a `GCS bucket`
 
-### 3. Load data to the data staging area
+### 4. Load data to the data staging area
 - Load `newegg_data.csv` and `tiki_data.json` file from the `GCS bucket` to the `data staging area` in `BigQuery`
 
-### 4. Transform and load data
+### 5. Transform and load data
 - Transform tiki-data
 
 ```
