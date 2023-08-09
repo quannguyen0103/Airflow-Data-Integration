@@ -1,7 +1,9 @@
 # Source
 
 ## Setup
-- Install `Airflow` on the same environment as MySQL and MongoDB
+- Install `Airflow`, `MySQL`, and `MongoDB`
+- Set up a table in MySQL to store Newegg data: [setup_table](src/data_processing/Newegg/setup_database.py)
+- Set up a collection in MongoDB to store Tiki data
 - Create a `GCS bucket`
 - Create two BigQuery datasets: a `staging area` for data preparation and processing, and a `final dataset` ready for analysis or deployment
 - Set up a [Google Cloud connection](src/connection_configurating/cloud_connection.py) for `Airflow`
