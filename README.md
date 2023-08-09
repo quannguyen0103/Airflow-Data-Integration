@@ -17,8 +17,8 @@
   - Send an alert email when a task failed
   
 ### 1. Scrape & load data
-- Scrape product data from the Tiki website and load it into the `tiki-data` collection in MongoDB: [Scrape-Tiki-data](src/data_processing/Tiki/scrape_data.py)
-- Scrape product data from the Newegg website and load it into the `newegg-data` table in MySQL: [Scrape-Newegg-data](src/data_processing/Newegg/scrape_data.py)
+- Scrape product data from the Tiki website and load it into the `tiki-data` collection in MongoDB: [load-tiki-data](src/data_processing/Tiki/scrape_data.py)
+- Scrape product data from the Newegg website and load it into the `newegg-data` table in MySQL: [load-newegg-data](src/data_processing/Newegg/scrape_data.py)
   
 ### 2. Extract data
 - Extract `newegg-data` table from `scraped_data` database in `MySQL` to `newegg_data.csv` file: [extract-newegg-data](src/data_processing/Newegg/extract_data.py)
