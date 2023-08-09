@@ -15,19 +15,20 @@
   - Run at 7 AM every day
   - Retry 3 times, each time 5 minutes apart
   - Send an alert email when a task failed
+### 1. Scrape data
 
-### 1. Extract data
+### 2. Extract data
 - Extract `newegg-data` table from `scraped_data` database in `MySQL` to `newegg_data.csv` file: [extract-newegg-data](src/data_processing/Newegg/extract_data.py)
 - Extract `tiki-data` collection from `scraped_data` database in `MongoDB` to a `tiki_data.json` file: [extract-tiki-data](src/data_processing/Tiki/extract_data.py)
   - Use `sed` command to remove `HTML` tags in the `JSON` file: `sed -E 's/<[^>]*>//g'`
  
-### 2. Migrate data
+### 3. Migrate data
 - Migrate `newegg_data.csv` ([migrate-Newegg-data](src/data_processing/Newegg/migrate_data.sh)) and `tiki_data.json` ([migrate-Tiki-data](src/data_processing/Tiki/migrate_data.sh)) file to a `GCS bucket`
 
-### 3. Load data to the data staging area
+### 4. Load data to the data staging area
 - Load `newegg_data.csv` and `tiki_data.json` file from the `GCS bucket` to the `data staging area` in `BigQuery`
 
-### 4. Transform and load data
+### 5. Transform and load data
 - Transform tiki-data
 
 ```
