@@ -9,7 +9,7 @@
 - Set up a [Google Cloud connection](src/connection_configurating/cloud_connection.py) for `Airflow`
 - Configure `Airflow SMTP` to send alert emails when a task failed
 
-## Airflow Flow
+## Airflow
 - Flow: Load data => Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
 - DAG: [process-data](src/dag)
   - Run at 7 AM every day
