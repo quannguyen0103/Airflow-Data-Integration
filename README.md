@@ -1,24 +1,18 @@
 # Source
 
 ## Setup
-- Install `Airflow`, `MySQL`, and `MongoDB`
-- Create a `MySQL` database and a table within the database to store Newegg data: [setup_table](src/data_processing/Newegg/setup_database.py)
-- Create a `MongoDB` database and a collection within the database to store Tiki data
+- Install `Airflow`, `MySQL`, and `MongoDB` on Google Cloud VM
 - Create a `GCS bucket`
 - Create two BigQuery datasets: a `staging dataset` for data preparation and processing, and a `final dataset` ready for analysis or deployment
 - Set up a [Google Cloud connection](src/connection_configurating/cloud_connection.py) for `Airflow`
 - Configure `Airflow SMTP` to send alert emails when a task failed
 
-## Airflow
-- Flow: Scrape & load data => Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
+## ETL Flow
+- Flow: Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
 - [DAG](src/dag)
   - Run at 7 AM every day
   - Retry 3 times, each time 5 minutes apart
   - Send an alert email when a task failed
-  
-### 1. Scrape & load data
-- Scrape product data from the Tiki website and load it into the `tiki-data` collection in MongoDB: [load-tiki-data](src/data_processing/Tiki/scrape_data.py)
-- Scrape product data from the Newegg website and load it into the `newegg-data` table in MySQL: [load-newegg-data](src/data_processing/Newegg/scrape_data.py)
   
 ### 2. Extract data
 - Extract `newegg-data` table from `scraped_data` database in `MySQL` to `newegg_data.csv` file: [extract-newegg-data](src/data_processing/Newegg/extract_data.py)
