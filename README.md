@@ -11,7 +11,7 @@
 
 ## Airflow
 - Flow: Scrape & load data => Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
-- DAG: [process-data](src/dag)
+- [DAG](src/dag)
   - Run at 7 AM every day
   - Retry 3 times, each time 5 minutes apart
   - Send an alert email when a task failed
