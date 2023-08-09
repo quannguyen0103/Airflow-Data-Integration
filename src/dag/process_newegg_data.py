@@ -37,21 +37,21 @@ with models.DAG("process_Newegg_data"
 
 	scrape_data = bash_operator.BashOperator(
 		task_id = "scrape_data"
-		, bash_command = "python3 /home/src/data_processing/Newegg/scrape_data.py"
+		, bash_command = "python3 /home/user/src/data_processing/Newegg/scrape_data.py"
 		, dag=dag
 		,
 )
 
 	extract_data = bash_operator.BashOperator(
 		task_id = "extract_data"
-		, bash_command = "python3 /home/src/data_processing/Newegg/extract_data.py"
+		, bash_command = "python3 /home/user/src/data_processing/Newegg/extract_data.py"
 		, dag=dag
 		,
 )
 
 	load_data_to_gcs = bash_operator.BashOperator(
 		task_id = "load_data_to_gcs"
-		, bash_command = "/home/src/data_processing/Newegg/migrate_data.sh "
+		, bash_command = "/home/user/src/data_processing/Newegg/migrate_data.sh "
 		, dag=dag
 		,
 )
