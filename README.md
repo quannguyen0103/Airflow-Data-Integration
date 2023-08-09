@@ -20,7 +20,7 @@
   - Use `sed` command to remove `HTML` tags in the `JSON` file: `sed -E 's/<[^>]*>//g'`
  
 ### 2. Migrate data
-- Migrate `newegg_data.csv` ([migrate-data](src/data_processing/Newegg/migrate_data.sh) and `tiki_data.json` ([migrate-data](src/data_processing/Tiki/migrate_data.sh) file to a `GCS bucket`
+- Migrate `newegg_data.csv` ([migrate-Newegg-data](src/data_processing/Newegg/migrate_data.sh)) and `tiki_data.json` ([migrate-Tiki-data](src/data_processing/Tiki/migrate_data.sh)) file to a `GCS bucket`
 
 ### 3. Load data to the data staging area
 - Load `newegg_data.csv` and `tiki_data.json` file from the `GCS bucket` to the `data staging area` in `BigQuery`
