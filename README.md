@@ -15,12 +15,12 @@
   - Send an alert email when a task failed
 
 ### 1. Extract data
-- Extract `newegg-data` table from `scraped_data` database in `MySQL` to `newegg_data.csv` file: [extract-newegg-data](src/data_processing/extract_newegg_data.py)
-- Extract `tiki-data` collection from `scraped_data` database in `MongoDB` to a `tiki_data.json` file: [extract-tiki-data](src/data_processing/extract_tiki_data.py)
+- Extract `newegg-data` table from `scraped_data` database in `MySQL` to `newegg_data.csv` file: [extract-newegg-data](src/data_processing/Newegg/extract_data.py)
+- Extract `tiki-data` collection from `scraped_data` database in `MongoDB` to a `tiki_data.json` file: [extract-tiki-data](src/data_processing/Tiki/extract_data.py)
   - Use `sed` command to remove `HTML` tags in the `JSON` file: `sed -E 's/<[^>]*>//g'`
  
 ### 2. Migrate data
-- Migrate `newegg_data.csv` and `tiki_data.json` file to a `GCS bucket`: [migrate-data](src/data_processing)
+- Migrate `newegg_data.csv` ([migrate-data](src/data_processing/Newegg/migrate_data.sh) and `tiki_data.json` ([migrate-data](src/data_processing/Tiki/migrate_data.sh) file to a `GCS bucket`
 
 ### 3. Load data to the data staging area
 - Load `newegg_data.csv` and `tiki_data.json` file from the `GCS bucket` to the `data staging area` in `BigQuery`
