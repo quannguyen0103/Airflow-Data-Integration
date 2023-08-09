@@ -50,13 +50,6 @@ with models.DAG("process_Tiki_data"
 	, schedule_interval = "0 7 * * *"
 	, default_args = default_dag_args) as dag:
 
-	load_data = bash_operator.BashOperator(
-                task_id = "load_data"
-                , bash_command = "Python3 /home/user/src/data_processing/Tiki/load_data.py"
-		, dag=dag
-		,
-)
-
 	extract_data = bash_operator.BashOperator(
                 task_id = "extract_data"
                 , bash_command = "/home/user/src/data_processing/Tiki/extract_data.sh "
@@ -111,4 +104,4 @@ with models.DAG("process_Tiki_data"
 		,
 )
 
-load_data >> extract_data >> load_data_to_gcs >> load_data_to_staging_warehouse >> transform_and_load_data >> create_data_mart
+extract_data >> load_data_to_gcs >> load_data_to_staging_warehouse >> transform_and_load_data >> create_data_mart
