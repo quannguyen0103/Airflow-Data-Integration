@@ -10,15 +10,15 @@
 - Configure `Airflow SMTP` to send alert emails when a task failed
 
 ## Airflow
-- Flow: Load data => Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
+- Flow: Scrape & load data => Extract data => Migrate data => Load data to the data staging area => Transform and load data => Create data mart
 - DAG: [process-data](src/dag)
   - Run at 7 AM every day
   - Retry 3 times, each time 5 minutes apart
   - Send an alert email when a task failed
   
-### 1. Load data
-- Scrape product data from the Tiki website and load it into the `tiki-data` collection in MongoDB: [load-Tiki-data](src/data_processing/Tiki/load_data.py)
-- Scrape product data from the Newegg website and load it into the `newegg-data` table in MySQL: [load-Newegg-data](src/data_processing/Newegg/load_data.py)
+### 1. Scrape & load data
+- Scrape product data from the Tiki website and load it into the `tiki-data` collection in MongoDB: [load-tiki-data](src/data_processing/Tiki/scrape_data.py)
+- Scrape product data from the Newegg website and load it into the `newegg-data` table in MySQL: [load-newegg-data](src/data_processing/Newegg/scrape_data.py)
   
 ### 2. Extract data
 - Extract `newegg-data` table from `scraped_data` database in `MySQL` to `newegg_data.csv` file: [extract-newegg-data](src/data_processing/Newegg/extract_data.py)

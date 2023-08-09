@@ -35,23 +35,23 @@ with models.DAG("process_Newegg_data"
 	, schedule_interval = "0 7 * * *"
 	, default_args = default_dag_args) as dag:
 
-	scrape_data = bash_operator.BashOperator(
-		task_id = "scrape_data"
-		, bash_command = "python3 /home/src/data_processing/Newegg/scrape_data.py"
+	load_data = bash_operator.BashOperator(
+		task_id = "load_data"
+		, bash_command = "python3 /home/user/src/data_processing/Newegg/load_data.py"
 		, dag=dag
 		,
 )
 
 	extract_data = bash_operator.BashOperator(
 		task_id = "extract_data"
-		, bash_command = "python3 /home/src/data_processing/Newegg/extract_data.py"
+		, bash_command = "python3 /home/user/src/data_processing/Newegg/extract_data.py"
 		, dag=dag
 		,
 )
 
 	load_data_to_gcs = bash_operator.BashOperator(
 		task_id = "load_data_to_gcs"
-		, bash_command = "/home/src/data_processing/Newegg/migrate_data.sh "
+		, bash_command = "/home/user/src/data_processing/Newegg/migrate_data.sh "
 		, dag=dag
 		,
 )
@@ -96,4 +96,4 @@ with models.DAG("process_Newegg_data"
 		,
 )
 
-scrape_data >> extract_data >> load_data_to_gcs >> load_data_to_staging_warehouse >> transform_and_load_data >> create_data_mart
+load_data >> extract_data >> load_data_to_gcs >> load_data_to_staging_warehouse >> transform_and_load_data >> create_data_mart
